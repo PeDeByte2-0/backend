@@ -3,6 +3,8 @@ const { getAllData } = require('../services/exemploService');
 
 async function getData(req, res) {
   try {
+    console.log("getData");
+    
     const data = await getAllData();
     res.json(data);
   } catch (err) {

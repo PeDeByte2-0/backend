@@ -7,6 +7,7 @@ console.log('Rota /dados carregada'); // Esta linha imprimirá uma mensagem no c
 
 router.get('/dados', (req, res, next) => {
   console.log('Requisição recebida em /dados'); // Esta linha será impressa sempre que essa rota for acessada
+  
   getData(req, res, next);
 });
 
