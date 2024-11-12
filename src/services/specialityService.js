@@ -1,9 +1,9 @@
-// src/services/specialityService.js
+// src/services/exemploService.js
 
 const { client } = require('../config/database');
 
-// Função para buscar todas as especialidades na tabela "tb_speciality"
-async function fetchAllSpecialities() {
+// Função para buscar todas as especialidades
+async function getAllSpecialities() {
   try {
     const query = 'SELECT * FROM "PeDeByteSchema".tb_speciality;';
     const result = await client.query(query);
@@ -16,7 +16,26 @@ async function fetchAllSpecialities() {
   }
 }
 
-// Função para criar uma nova especialidade na tabela "tb_speciality"
+// Função para buscar uma especialidade pelo ID
+async function getSpecialityById(id) {
+  try {
+    const query = 'SELECT * FROM "PeDeByteSchema".tb_speciality WHERE id = $1;';
+    const values = [id];
+    const result = await client.query(query, values);
+
+    if (result.rows.length === 0) {
+      throw new Error(`Especialidade com ID ${id} não encontrada`);
+    }
+
+    console.log('Especialidade encontrada:', result.rows[0]);
+    return result.rows[0];
+  } catch (error) {
+    console.error(`Erro ao buscar especialidade com ID ${id}:`, error.stack);
+    throw error;
+  }
+}
+
+// Função para criar uma nova especialidade
 async function createSpeciality(specialityName) {
   try {
     const query = `INSERT INTO "PeDeByteSchema".tb_speciality (name) VALUES ($1) RETURNING *;`;
@@ -31,7 +50,48 @@ async function createSpeciality(specialityName) {
   }
 }
 
+// Função para atualizar uma especialidade pelo ID
+async function updateSpeciality(id, specialityName) {
+  try {
+    const query = `UPDATE "PeDeByteSchema".tb_speciality SET name = $1 WHERE id = $2 RETURNING *;`;
+    const values = [specialityName, id];
+    const result = await client.query(query, values);
+
+    if (result.rows.length === 0) {
+      throw new Error(`Especialidade com ID ${id} não encontrada`);
+    }
+
+    console.log('Especialidade atualizada:', result.rows[0]);
+    return result.rows[0];
+  } catch (error) {
+    console.error(`Erro ao atualizar especialidade com ID ${id}:`, error.stack);
+    throw error;
+  }
+}
+
+// Função para excluir uma especialidade pelo ID
+async function deleteSpeciality(id) {
+  try {
+    const query = 'DELETE FROM "PeDeByteSchema".tb_speciality WHERE id = $1 RETURNING *;';
+    const values = [id];
+    const result = await client.query(query, values);
+
+    if (result.rows.length === 0) {
+      throw new Error(`Especialidade com ID ${id} não encontrada`);
+    }
+
+    console.log('Especialidade excluída:', result.rows[0]);
+    return result.rows[0];
+  } catch (error) {
+    console.error(`Erro ao excluir especialidade com ID ${id}:`, error.stack);
+    throw error;
+  }
+}
+
 module.exports = {
-  fetchAllSpecialities,
+  getAllSpecialities,
+  getSpecialityById,
   createSpeciality,
+  updateSpeciality,
+  deleteSpeciality,
 };
