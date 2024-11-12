@@ -19,7 +19,9 @@ async function getAllSpecialities() {
 // Função para buscar uma especialidade pelo ID
 async function getSpecialityById(id) {
   try {
-    const query = 'SELECT * FROM "PeDeByteSchema".tb_speciality WHERE id = $1;';
+    console.log("mamada" + id);
+    
+    const query = 'SELECT * FROM "PeDeByteSchema".tb_speciality WHERE idtb_speciality = $1;';
     const values = [id];
     const result = await client.query(query, values);
 
