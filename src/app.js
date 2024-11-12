@@ -1,7 +1,7 @@
 // src/app.js
 const express = require('express');
-const exemploRoutes = require('./routes/exemploRoutes'); // Suas rotas
-const specialityRoutes = require('./routes/specialityRoutes'); // Suas rotas
+const exemploRoutes = require('./3routes/exemploRoutes'); // Suas rotas
+const specialityRoutes = require('./3routes/specialityRoutes'); // Suas rotas
 const app = express();
 
 app.use(express.json());  // Se você for enviar/receber JSON, adicione esse middleware
