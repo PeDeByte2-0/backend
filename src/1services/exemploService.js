@@ -1,5 +1,5 @@
 // src/services/exemploService.js
-const { client } = require('../config/database');
+const { client } = require('../0config/database');
 
 async function getAllData() {
   try {

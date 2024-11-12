@@ -1,6 +1,6 @@
 // src/services/exemploService.js
 
-const { client } = require('../config/database');
+const { client } = require('../0config/database');
 
 // Função para buscar todas as especialidades
 async function getAllSpecialities() {
