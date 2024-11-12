@@ -5,7 +5,6 @@ const app = require('../app');  // Importa o app configurado no app.js
 async function startServer() {
   try {
     await connectDatabase();  // Conecta ao banco de dados
-    console.log('Conexão com o banco de dados bem-sucedida.');
 
     // Inicia o servidor na porta 3000
     app.listen(3000, () => {
