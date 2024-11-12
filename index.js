@@ -1,8 +1,4 @@
-// src/app.js
-const express = require('express');
-const exemploRoutes = require('./src/routes/exemploRoutes');
-const app = express();
+require('dotenv').config();
+const startServer = require('./src/config/server');  // Importa a função startServer do arquivo startServer.js
 
-app.use('/api', exemploRoutes);
-
-module.exports = app;
+startServer();

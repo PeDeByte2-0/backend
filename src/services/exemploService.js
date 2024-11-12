@@ -12,4 +12,16 @@ async function getAllData() {
   }
 }
 
-module.exports = { getAllData };
+async function insertData(specialityName) {
+  try{
+    const query = `INSERT INTO "PeDeByteSchema".tb_speciality (name) VALUES ($1) RETURNING *;`;
+    const values = [specialityName];
+    const res = await client.query(query, values);
+    console.log('Novo registro inserido:', res.rows[0]);
+    return res.rows[0];
+  } catch (err) {
+    console.error('Erro ao fazer INSERT:', err.stack);
+    throw err;
+  }
+}
+module.exports = { getAllData, insertData };
