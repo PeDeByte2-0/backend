@@ -1,6 +1,6 @@
 // src/app.js
 const express = require('express');
-const exemploRoutes = require('./3routes/exemploRoutes'); // Suas rotas
+const exemploRoutes = require('./3routes/schoolRoutes'); // Suas rotas
 const specialityRoutes = require('./3routes/specialityRoutes'); // Suas rotas
 const app = express();
 
