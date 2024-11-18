@@ -1,6 +1,6 @@
 // src/routes/exemploRoutes.js
 const express = require('express');
-const { getData } = require('../2controllers/exemploController');
+const { getData } = require('../2controllers/schoolController');
 const router = express.Router();
 
 console.log('Rota /dados carregada'); // Esta linha imprimirá uma mensagem no console quando o arquivo for importado
