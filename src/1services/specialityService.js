@@ -55,7 +55,7 @@ async function createSpeciality(specialityName) {
 // Função para atualizar uma especialidade pelo ID
 async function updateSpeciality(id, specialityName) {
   try {
-    const query = `UPDATE "PeDeByteSchema".tb_speciality SET name = $1 WHERE id = $2 RETURNING *;`;
+    const query = `UPDATE "PeDeByteSchema".tb_speciality SET name = $1 WHERE idtb_speciality = $2 RETURNING *;`;
     const values = [specialityName, id];
     const result = await client.query(query, values);
 
@@ -74,7 +74,7 @@ async function updateSpeciality(id, specialityName) {
 // Função para excluir uma especialidade pelo ID
 async function deleteSpeciality(id) {
   try {
-    const query = 'DELETE FROM "PeDeByteSchema".tb_speciality WHERE id = $1 RETURNING *;';
+    const query = 'DELETE FROM "PeDeByteSchema".tb_speciality WHERE idtb_speciality = $1 RETURNING *;';
     const values = [id];
     const result = await client.query(query, values);
 
