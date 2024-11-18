@@ -1,11 +1,11 @@
 // src/controllers/exemploController.js
-const { getAllSpecialities, getSpecialityById, createSpeciality } = require('../1services/specialityService');
+const { getAllSchools, getSchoolById, createSchool } = require('../1services/schoolService');
 
 async function getData(req, res) {
   try {
     console.log("getData");
     
-    const data = await getAllSpecialities();
+    const data = await getAllSchools();
     res.json(data);
   } catch (err) {
     res.status(500).send('Erro ao buscar dados controller');
@@ -16,8 +16,8 @@ async function getData(req, res) {
 async function getDataById(req, res) {
   try {
     console.log("getData");
-    const specialityId = req.params.id;
-    const data = await getSpecialityById(specialityId);
+    const schoolId = req.params.id;
+    const data = await getSchoolById(schoolId);
     res.json(data);
   } catch (err) {
     res.status(500).send('Erro ao buscar dados controller');
@@ -32,8 +32,8 @@ async function setData(req, res) {
       return res.status(400).json({ message: 'O campo "name" é obrigatório.' });
     }
 
-    const newSpeciality = await createSpeciality(name);
-    res.status(201).json(newSpeciality);
+    const newSchool = await createSchool(name);
+    res.status(201).json(newSchool);
   } catch (err) {
     res.status(500).send('Erro ao buscar dados controller' + err);
   }
