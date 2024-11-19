@@ -21,7 +21,7 @@ async function getSchoolById(id) {
   try {
     console.log("mamada" + id);
     
-    const query = 'SELECT * FROM "PeDeByteSchema".tb_school WHERE idtb_school = $1;';
+    const query = 'SELECT * FROM "PeDeByteSchema".tb_school WHERE id_school = $1;';
     const values = [id];
     const result = await client.query(query, values);
 
@@ -36,37 +36,36 @@ async function getSchoolById(id) {
     throw error;
   }
 }
-
-// Função para criar uma nova especialidade
-async function createSchool(schoolName) {
+// Função para criar uma nova escola
+async function createSchool(schoolName, weekProfileId) {
   try {
-    const query = `INSERT INTO "PeDeByteSchema".tb_school (name) VALUES ($1) RETURNING *;`;
-    const values = [schoolName];
+    const query = `INSERT INTO "PeDeByteSchema".tb_school (name, tb_week_profile_id_week_profile) VALUES ($1, $2) RETURNING *;`;
+    const values = [schoolName, weekProfileId];
     const result = await client.query(query, values);
-    
-    console.log('Nova especialidade inserida:', result.rows[0]);
+
+    console.log('Nova escola inserida:', result.rows[0]);
     return result.rows[0];
   } catch (error) {
-    console.error('Erro ao criar especialidade:', error.stack);
+    console.error('Erro ao criar escola:', error.stack);
     throw error;
   }
 }
 
-// Função para atualizar uma especialidade pelo ID
-async function updateSchool(id, schoolName) {
+// Função para atualizar uma escola pelo ID
+async function updateSchool(id, schoolName, weekProfileId) {
   try {
-    const query = `UPDATE "PeDeByteSchema".tb_school SET name = $1 WHERE idtb_school = $2 RETURNING *;`;
-    const values = [schoolName, id];
+    const query = `UPDATE "PeDeByteSchema".tb_school SET name = $1, tb_week_profile_id_week_profile = $2 WHERE id_school = $3 RETURNING *;`;
+    const values = [schoolName, weekProfileId, id];
     const result = await client.query(query, values);
 
     if (result.rows.length === 0) {
-      throw new Error(`Especialidade com ID ${id} não encontrada`);
+      throw new Error(`Escola com ID ${id} não encontrada`);
     }
 
-    console.log('Especialidade atualizada:', result.rows[0]);
+    console.log('Escola atualizada:', result.rows[0]);
     return result.rows[0];
   } catch (error) {
-    console.error(`Erro ao atualizar especialidade com ID ${id}:`, error.stack);
+    console.error(`Erro ao atualizar escola com ID ${id}:`, error.stack);
     throw error;
   }
 }
@@ -74,7 +73,7 @@ async function updateSchool(id, schoolName) {
 // Função para excluir uma especialidade pelo ID
 async function deleteSchool(id) {
   try {
-    const query = 'DELETE FROM "PeDeByteSchema".tb_school WHERE idtb_school = $1 RETURNING *;';
+    const query = 'DELETE FROM "PeDeByteSchema".tb_school WHERE id_school = $1 RETURNING *;';
     const values = [id];
     const result = await client.query(query, values);
 
