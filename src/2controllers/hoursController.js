@@ -38,7 +38,7 @@ async function createData(req, res) {
   }
 }
 
-async function updateHour(req, res) {
+async function updateData(req, res) {
   try {
     const { weekday, starttime, endtime } = req.body;
     const hourId = req.params.id;
@@ -59,7 +59,7 @@ async function updateHour(req, res) {
   }
 }
 
-async function deleteHour(req, res) {
+async function deleteData(req, res) {
   try {
     const hourId = req.params.id;
     const data = await deleteHour(hourId);
@@ -69,4 +69,4 @@ async function deleteHour(req, res) {
   }
 }
 
-module.exports = { getHours, getById, createHour, updateHour, deleteHour };
+module.exports = { getHours, getById, createData, updateData, deleteData };
