@@ -32,13 +32,17 @@ async function getWeekProfileById(id) {
     throw error;
   }
 }
-
-// Função para criar um novo perfil semanal
-async function createWeekProfile() {
+// Função para criar um novo perfil semanal com o campo 'name'
+async function createWeekProfile(name) {
   try {
-    const query = `INSERT INTO "PeDeByteSchema".tb_week_profile DEFAULT VALUES RETURNING *;`;
-    const result = await client.query(query);
-    
+    const query = `
+      INSERT INTO "PeDeByteSchema".tb_week_profile (name) 
+      VALUES ($1) 
+      RETURNING *;
+    `;
+    const values = [name];
+    const result = await client.query(query, values);
+
     console.log('Novo perfil semanal inserido:', result.rows[0]);
     return result.rows[0];
   } catch (error) {
@@ -47,12 +51,16 @@ async function createWeekProfile() {
   }
 }
 
-// Função para atualizar um perfil semanal pelo ID
-async function updateWeekProfile(id, newValues) {
+// Função para atualizar o campo 'name' de um perfil semanal pelo ID
+async function updateWeekProfile(id, name) {
   try {
-    // Adapte a consulta conforme as colunas que deseja atualizar, se houver
-    const query = `UPDATE "PeDeByteSchema".tb_week_profile SET /* seus campos aqui */ WHERE id_week_profile = $1 RETURNING *;`;
-    const values = [id, ...newValues];
+    const query = `
+      UPDATE "PeDeByteSchema".tb_week_profile 
+      SET name = $1 
+      WHERE id_week_profile = $2 
+      RETURNING *;
+    `;
+    const values = [name, id];
     const result = await client.query(query, values);
 
     if (result.rows.length === 0) {
@@ -66,6 +74,7 @@ async function updateWeekProfile(id, newValues) {
     throw error;
   }
 }
+
 
 // Função para excluir um perfil semanal pelo ID
 async function deleteWeekProfile(id) {
