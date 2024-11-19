@@ -22,12 +22,11 @@ async function getById(req, res) {
     res.status(500).send('Erro ao buscar hora pelo ID no controller');
   }
 }
-
 async function createData(req, res) {
   try {
     const { weekday, starttime, endtime } = req.body;
 
-    if (!weekday || !starttime || !endtime) {
+    if (weekday === undefined || !starttime || !endtime) {
       return res.status(400).json({ message: 'Os campos "weekday", "starttime" e "endtime" são obrigatórios.' });
     }
 
@@ -43,7 +42,7 @@ async function updateData(req, res) {
     const { weekday, starttime, endtime } = req.body;
     const hourId = req.params.id;
 
-    if (!weekday || !starttime || !endtime) {
+    if (weekday === undefined || !starttime || !endtime) {
       return res.status(400).json({ message: 'Os campos "weekday", "starttime" e "endtime" são obrigatórios.' });
     }
 
