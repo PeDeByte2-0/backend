@@ -34,17 +34,17 @@ async function getPersonById(id) {
 }
 
 // Função para criar uma nova pessoa
-async function createPerson(active, tb_school_id_school) {
+async function createPerson(tb_school_id_school) {
   try {
     const query = `
       INSERT INTO "PeDeByteSchema".tb_person (active, tb_school_id_school) 
       VALUES ($1, $2) RETURNING *;
     `;
-    const values = [active, tb_school_id_school];
+    const values = ['TRUE', tb_school_id_school];
     const result = await client.query(query, values);
 
     console.log('Nova pessoa inserida:', result.rows[0]);
-    return result.rows[0];
+    return result.rows[0].id_person;
   } catch (error) {
     console.error('Erro ao criar pessoa:', error.stack);
     throw error;

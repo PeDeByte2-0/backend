@@ -30,4 +30,5 @@ router.delete('/person/:id', async (req, res, next) => {
   console.log('Requisição recebida em /person/:id');
   deleteData(req, res, next);
 });
+
 module.exports = router;

@@ -26,13 +26,13 @@ async function getDataById(req, res) {
 
 async function setData(req, res) {
   try {
-    const { active, idSchool } = req.body;
+    const {idSchool } = req.body;
 
-    if (active === undefined || !idSchool) {
-      return res.status(400).json({ message: 'Os campos "active" e "idSchool" são obrigatórios.' });
+    if (!idSchool) {
+      return res.status(400).json({ message: 'Os campos "idSchool" são obrigatórios.' });
     }
 
-    const newPerson = await createPerson(active, idSchool);
+    const newPerson = await createPerson(idSchool);
     res.status(201).json(newPerson);
   } catch (err) {
     res.status(500).send('Erro ao criar nova pessoa: ' + err.message);
