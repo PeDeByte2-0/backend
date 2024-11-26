@@ -1,11 +1,11 @@
 // src/controllers/exemploController.js
-const { getAllSpecialities, getSpecialityById, createSpeciality, updateSpeciality, deleteSpeciality} = require('../1services/specialityService');
+const { getAllWeekProfiles, getWeekProfileById, createWeekProfile, updateWeekProfile, deleteWeekProfile} = require('../1services/weekProfileService');
 
 async function getData(req, res) {
   try {
     console.log("getData");
     
-    const data = await getAllSpecialities();
+    const data = await getAllWeekProfiles();
     res.json(data);
   } catch (err) {
     res.status(500).send('Erro ao buscar dados controller');
@@ -16,8 +16,8 @@ async function getData(req, res) {
 async function getDataById(req, res) {
   try {
     console.log("getData");
-    const specialityId = req.params.id;
-    const data = await getSpecialityById(specialityId);
+    const weekProfileId = req.params.id;
+    const data = await getWeekProfileById(weekProfileId);
     res.json(data);
   } catch (err) {
     res.status(500).send('Erro ao buscar dados controller');
@@ -32,8 +32,8 @@ async function setData(req, res) {
       return res.status(400).json({ message: 'O campo "name" é obrigatório.' });
     }
 
-    const newSpeciality = await createSpeciality(name);
-    res.status(201).json(newSpeciality);
+    const newWeekProfile = await createWeekProfile(name);
+    res.status(201).json(newWeekProfile);
   } catch (err) {
     res.status(500).send('Erro ao buscar dados controller' + err);
   }
@@ -41,16 +41,16 @@ async function setData(req, res) {
 async function updateData(req, res) {
   try {
     const { name } = req.body;
-    const specialityId = req.params.id;
+    const weekProfileId = req.params.id;
 
     if (!name) {
       return res.status(400).json({ message: 'O campo "name" é obrigatório.' });
     }
 
-    const newSpeciality = await updateSpeciality(specialityId, name);
+    const newWeekProfile = await updateWeekProfile(weekProfileId, name);
 
-    if (newSpeciality) {
-      return res.status(200).json(newSpeciality); // Atualização bem-sucedida
+    if (newWeekProfile) {
+      return res.status(200).json(newWeekProfile); // Atualização bem-sucedida
     } else {
       return res.status(404).json({ message: 'Especialidade não encontrada.' }); // Caso o ID não exista
     }
@@ -62,8 +62,8 @@ async function updateData(req, res) {
 
 async function deleteData(req, res) {
   try {
-    const specialityId = req.params.id;
-    const data = await deleteSpeciality(specialityId);
+    const weekProfileId = req.params.id;
+    const data = await deleteWeekProfile(weekProfileId);
     res.json(data);
   } catch (err) {
     res.status(500).send('Erro ao buscar dados controller');

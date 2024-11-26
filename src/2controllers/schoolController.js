@@ -1,11 +1,11 @@
 // src/controllers/exemploController.js
-const { getAllSpecialities, getSpecialityById, createSpeciality, updateSpeciality, deleteSpeciality} = require('../1services/specialityService');
+const { getAllSchools, getSchoolById, createSchool, updateSchool, deleteSchool} = require('../1services/schoolService');
 
 async function getData(req, res) {
   try {
     console.log("getData");
     
-    const data = await getAllSpecialities();
+    const data = await getAllSchools();
     res.json(data);
   } catch (err) {
     res.status(500).send('Erro ao buscar dados controller');
@@ -16,8 +16,8 @@ async function getData(req, res) {
 async function getDataById(req, res) {
   try {
     console.log("getData");
-    const specialityId = req.params.id;
-    const data = await getSpecialityById(specialityId);
+    const schoolId = req.params.id;
+    const data = await getSchoolById(schoolId);
     res.json(data);
   } catch (err) {
     res.status(500).send('Erro ao buscar dados controller');
@@ -26,31 +26,31 @@ async function getDataById(req, res) {
 
 async function setData(req, res) {
   try {
-    const { name } = req.body;
+    const { name, weekId } = req.body;
 
-    if (!name) {
+    if (!name || !weekId) {
       return res.status(400).json({ message: 'O campo "name" é obrigatório.' });
     }
 
-    const newSpeciality = await createSpeciality(name);
-    res.status(201).json(newSpeciality);
+    const newSchool = await createSchool(name, weekId);
+    res.status(201).json(newSchool);
   } catch (err) {
     res.status(500).send('Erro ao buscar dados controller' + err);
   }
 }
 async function updateData(req, res) {
   try {
-    const { name } = req.body;
-    const specialityId = req.params.id;
+    const { name, weekId } = req.body;
+    const schoolId = req.params.id;
 
-    if (!name) {
+    if (!name || !weekId) {
       return res.status(400).json({ message: 'O campo "name" é obrigatório.' });
     }
 
-    const newSpeciality = await updateSpeciality(specialityId, name);
+    const newSchool = await updateSchool(schoolId, name);
 
-    if (newSpeciality) {
-      return res.status(200).json(newSpeciality); // Atualização bem-sucedida
+    if (newSchool) {
+      return res.status(200).json(newSchool); // Atualização bem-sucedida
     } else {
       return res.status(404).json({ message: 'Especialidade não encontrada.' }); // Caso o ID não exista
     }
@@ -62,8 +62,8 @@ async function updateData(req, res) {
 
 async function deleteData(req, res) {
   try {
-    const specialityId = req.params.id;
-    const data = await deleteSpeciality(specialityId);
+    const schoolId = req.params.id;
+    const data = await deleteSchool(schoolId);
     res.json(data);
   } catch (err) {
     res.status(500).send('Erro ao buscar dados controller');
