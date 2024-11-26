@@ -2,9 +2,8 @@ const {client} = require('../0config/database');
 
 async function getSpecialityFromStudent(id){
     try {
-        const query = 'select ts.id_speciality, ts."name", tn.active  from "PeDeByteSchema".tb_speciality ts join "PeDeByteSchema".tb_necessity tn on ts.id_speciality = tn.speciality_id where tn.speciality_id = $1;';
-        const values = [id];
-        const result = await client.query(query, values);
+        const query = 'select ts.id_speciality, ts."name", tn.active  from "PeDeByteSchema".tb_speciality ts join "PeDeByteSchema".tb_necessity tn on ts.id_speciality = tn.speciality_id where tn.student_id = $1;';
+        const result = await client.query(query, [id]);
 
         console.log("Registro de escpecialidades dos alunos: ", result.rows);
         return result.rows;

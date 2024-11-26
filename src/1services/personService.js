@@ -38,7 +38,7 @@ async function createPerson(idSchool) {
   try {
     const query = `
       INSERT INTO "PeDeByteSchema".tb_person (active, school_id) 
-      VALUES (TRUE, $2) RETURNING *;
+      VALUES (TRUE, $1) RETURNING *;
     `;
     const values = [idSchool];
     const result = await client.query(query, values);
@@ -75,20 +75,23 @@ async function updatePerson(id, idSchool) {
 
 async function inativatePerson(id) {
   try {
+    await client.query('BEGIN');
     const query = `
       UPDATE "PeDeByteSchema".tb_person 
-      SET active = 'FALSE' 
-      WHERE id_person = $3 RETURNING *;
+      SET active = FALSE 
+      WHERE id_person = $1 RETURNING *;
     `;
     const result = await client.query(query, [id]);
+    await client.query('COMMIT');
 
     if (result.rows.length === 0) {
       throw new Error(`Pessoa com ID ${id} não encontrada`);
     }
 
     console.log('Pessoa atualizada:', result.rows[0]);
-    return result.rows[0];
+    return result.rows[0].id_person;
   } catch (error) {
+    await client.query('ROLLBACK');
     console.error(`Erro ao atualizar pessoa com ID ${id}:`, error.stack);
     throw error;
   }

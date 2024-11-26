@@ -53,8 +53,8 @@ router.post('/students/', async (req, res, next) => {
 //     "celular2": "998605544",
 //     "responsavel": "Ataide Mariot",
 //     "obs": "affs",
-//     "idAvalilablehours": ["1"], 
-//     "specialits": ["1"]
+//     "idAvalilablehours": ["2", "3"], 
+//     "specialits": ["2", "3"]
 // }
 
 router.put('/students/:id', async (req, res, next) => {

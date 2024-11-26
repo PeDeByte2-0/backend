@@ -42,7 +42,7 @@ async function getDataNecessity(req, res) {
         const data = await getSpecialityFromStudent(personId);
         res.json(data);
     }catch(err){
-        res.status(500).send('Erro ao buscar controller');
+        res.status(500).send(`Erro ao buscar controller ${err}`);
     }
 }
 
@@ -50,7 +50,7 @@ async function setDataStudent(req, res) {
     try {
         const {idSchool, firstName, lastName, cpf, celular, celular2, responsavel, obs, idAvalilablehours, specialits} = req.body;
 
-        const newStudent = await createStudent(idSchool, firstName, lastName, cpf, celular, obs, idAvalilablehours, specialits);
+        const newStudent = await createStudent(idSchool, firstName, lastName, cpf, celular, celular2, responsavel, obs, idAvalilablehours, specialits);
         res.status(201).json(newStudent);
     } catch (err) {
         res.status(500).send ('Erro ao criar novo estudante: ' +err.message);
@@ -75,6 +75,7 @@ async function updateData(req, res) {
 
             return res.status(200).json({student, studentData: updatedStudent});
         }else{
+            console.log(`Teste: ${updatedStudent}`);
             return res.status(404).json({ message: 'Estudante não encontrada ou não foi possível atualizar os dados.' });
         }
     } catch (err) {
@@ -84,7 +85,7 @@ async function updateData(req, res) {
 
 async function inativateDataStudent(req, res) {
     try {
-        const {id} = req.body;
+        const id = req.params.id;
         
         const updatedStudent = await inativateStudent(id);
 

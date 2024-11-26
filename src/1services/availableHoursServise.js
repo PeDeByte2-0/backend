@@ -5,7 +5,12 @@ async function getscheduledHour(PersonId, HourId) {
         const query = `select tat.hours_id from "PeDeByteSchema".tb_available_time tat where tat.member_id  = ($1) and tat.scheduled = true and tat.hours_id = ($2);`;
 
         const result = await client.query(query, [PersonId, HourId]);
-        return result.rows[0].hours_id;
+        if(result.rows.length > 0){
+            return result.rows[0].id_hours;
+        } else {
+            console.log('Nenhum horário agendado encontrado.');
+            return null; 
+        }
     } catch (err) {
         console.error(`Erro ao buscar horários agendados: ${err}`);
         throw err;
@@ -55,10 +60,13 @@ async function deleteAvailableHours(PersonId, HourId) {
 
 async function inativateAvailableHours(PersonId){
     try {
-        const availableHoursInativateQuery = `update "PeDeByteSchema".tb_available_time tat set tat.scheduled  = TRUE where tat.member_id = ($1);`
+        await client.query('BEGIN'); 
+        const availableHoursInativateQuery = `update "PeDeByteSchema".tb_available_time tat set scheduled = TRUE where member_id = $1;`
         await client.query(availableHoursInativateQuery, [PersonId]);
+        await client.query('COMMIT');
     } catch (err) {
-        console.log(`Erro inativando horario disponível ID ${PersonId}`);
+        await client.query('ROLLBACK');
+        console.log(`Erro inativando horario disponível ID ${PersonId}: ${err}`);
         
     }
 }
