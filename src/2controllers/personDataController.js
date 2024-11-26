@@ -1,5 +1,5 @@
 // src/controllers/exemploController.js
-const { getAllPersonDatasData, getPersonDataById, createPersonData, updatePersonData, deletePersonData} = require('../1services/personDataService');
+const {createPersonDataProfessional, updatePersonDataProfessional} = require('../1services/personDataService');
 const { getPersonById } = require('../1services/personService');
 
 async function getData(req, res) {
@@ -33,7 +33,7 @@ async function setData(req, res) {
     }
 
     // Criar dados pessoais relacionados em tb_person_data
-    const newPersonData = await createPersonData(idPerson, firstName, lastName, cpf, celular);
+    const newPersonData = await createPersonDataProfessional(idPerson, firstName, lastName, cpf, celular);
 
     // Você pode adicionar a consulta de dados da pessoa aqui, caso queira incluir mais informações sobre a pessoa
     const person = await getPersonById(idPerson);
@@ -54,7 +54,7 @@ async function updateData(req, res) {
     }
 
     // Atualizar dados pessoais em tb_person_data
-    const updatedPersonData = await updatePersonData(personId, firstName, lastName, cpf, celular);
+    const updatedPersonData = await updatePersonDataProfessional(personId, firstName, lastName, cpf, celular);
 
     // Verifique se os dados foram atualizados com sucesso
     if (updatedPersonData) {

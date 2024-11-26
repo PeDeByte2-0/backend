@@ -17,7 +17,7 @@ async function getAllMembers() {
 // Função para buscar um membro pelo ID
 async function getMemberById(id) {
   try {
-    const query = 'SELECT * FROM "PeDeByteSchema".tb_member WHERE tb_person_id_person = $1;';
+    const query = 'SELECT * FROM "PeDeByteSchema".tb_member WHERE person_id  = $1;';
     const values = [id];
     const result = await client.query(query, values);
 
@@ -37,7 +37,7 @@ async function getMemberById(id) {
 async function createMember(idPerson, obs) {
   try {
     const query = `
-      INSERT INTO "PeDeByteSchema".tb_member (tb_person_id_person, obs) 
+      INSERT INTO "PeDeByteSchema".tb_member (person_id, obs) 
       VALUES ($1, $2) RETURNING *;
     `;
     const values = [idPerson, obs];
@@ -57,7 +57,7 @@ async function updateMember(idPerson, obs) {
     const query = `
       UPDATE "PeDeByteSchema".tb_member 
       SET obs = $1 
-      WHERE tb_person_id_person = $2 RETURNING *;
+      WHERE person_id = $2 RETURNING *;
     `;
     const values = [obs, idPerson];
     const result = await client.query(query, values);
@@ -77,7 +77,7 @@ async function updateMember(idPerson, obs) {
 // Função para excluir um membro pelo ID
 async function deleteMember(idPerson) {
   try {
-    const query = 'DELETE FROM "PeDeByteSchema".tb_member WHERE tb_person_id_person = $1 RETURNING *;';
+    const query = 'DELETE FROM "PeDeByteSchema".tb_member WHERE person_id = $1 RETURNING *;';
     const values = [idPerson];
     const result = await client.query(query, values);
 

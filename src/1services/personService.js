@@ -34,13 +34,13 @@ async function getPersonById(id) {
 }
 
 // Função para criar uma nova pessoa
-async function createPerson(tb_school_id_school) {
+async function createPerson(idSchool) {
   try {
     const query = `
-      INSERT INTO "PeDeByteSchema".tb_person (active, tb_school_id_school) 
-      VALUES ($1, $2) RETURNING *;
+      INSERT INTO "PeDeByteSchema".tb_person (active, school_id) 
+      VALUES (TRUE, $2) RETURNING *;
     `;
-    const values = ['TRUE', tb_school_id_school];
+    const values = [idSchool];
     const result = await client.query(query, values);
 
     console.log('Nova pessoa inserida:', result.rows[0]);
@@ -52,15 +52,35 @@ async function createPerson(tb_school_id_school) {
 }
 
 // Função para atualizar uma pessoa pelo ID
-async function updatePerson(id, active, tb_school_id_school) {
+async function updatePerson(id, idSchool) {
   try {
     const query = `
       UPDATE "PeDeByteSchema".tb_person 
-      SET active = $1, tb_school_id_school = $2 
+      SET school_id = $1 
+      WHERE id_person = $2 RETURNING *;
+    `;
+    const result = await client.query(query, [idSchool, id]);
+
+    if (result.rows.length === 0) {
+      throw new Error(`Pessoa com ID ${id} não encontrada`);
+    }
+
+    console.log('Pessoa atualizada:', result.rows[0]);
+    return result.rows[0];
+  } catch (error) {
+    console.error(`Erro ao atualizar pessoa com ID ${id}:`, error.stack);
+    throw error;
+  }
+}
+
+async function inativatePerson(id) {
+  try {
+    const query = `
+      UPDATE "PeDeByteSchema".tb_person 
+      SET active = 'FALSE' 
       WHERE id_person = $3 RETURNING *;
     `;
-    const values = [active, tb_school_id_school, id];
-    const result = await client.query(query, values);
+    const result = await client.query(query, [id]);
 
     if (result.rows.length === 0) {
       throw new Error(`Pessoa com ID ${id} não encontrada`);
@@ -99,4 +119,5 @@ module.exports = {
   createPerson,
   updatePerson,
   deletePerson,
+  inativatePerson
 };
