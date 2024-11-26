@@ -39,7 +39,7 @@ async function getSchoolById(id) {
 // Função para criar uma nova escola
 async function createSchool(schoolName, weekProfileId) {
   try {
-    const query = `INSERT INTO "PeDeByteSchema".tb_school (name, tb_week_profile_id_week_profile) VALUES ($1, $2) RETURNING *;`;
+    const query = `INSERT INTO "PeDeByteSchema".tb_school (name, id_week_profile) VALUES ($1, $2) RETURNING *;`;
     const values = [schoolName, weekProfileId];
     const result = await client.query(query, values);
 
@@ -54,7 +54,7 @@ async function createSchool(schoolName, weekProfileId) {
 // Função para atualizar uma escola pelo ID
 async function updateSchool(id, schoolName, weekProfileId) {
   try {
-    const query = `UPDATE "PeDeByteSchema".tb_school SET name = $1, tb_week_profile_id_week_profile = $2 WHERE id_school = $3 RETURNING *;`;
+    const query = `UPDATE "PeDeByteSchema".tb_school SET name = $1, id_week_profile = $2 WHERE id_school = $3 RETURNING *;`;
     const values = [schoolName, weekProfileId, id];
     const result = await client.query(query, values);
 
