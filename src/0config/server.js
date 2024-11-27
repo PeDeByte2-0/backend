@@ -7,8 +7,9 @@ async function startServer() {
     await connectDatabase();  // Conecta ao banco de dados
 
     // Inicia o servidor na porta 3000
-    app.listen(3000, () => {
-      console.log('Servidor rodando na porta 3000');
+    app.listen(3001, () => {
+      console.log('Servidor rodando na porta 3001');
+      console.log('http://localhost:3001');
     });
   } catch (error) {
     console.error('Erro ao iniciar o servidor:', error);
