@@ -19,7 +19,13 @@ async function getscheduledHour(PersonId, HourId) {
 
 async function getavailablehours(PersonId) {
     try {
-        const query = `select * from "PeDeByteSchema".tb_available_time tat where tat.member_id  = ($1);`
+        const query = `select   tat.member_id,
+                                th.*,
+                                tat.scheduled 
+                        from "PeDeByteSchema".tb_available_time tat
+                        join "PeDeByteSchema".tb_hours th on
+                            tat.hours_id = th.id_hours 
+                        where tat.member_id  = ($1);`
         const result = await client.query(query, [PersonId]);
         console.log ('Resultado do SELECT: ', result.rows);
         return result.rows;

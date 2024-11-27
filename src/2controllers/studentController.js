@@ -1,4 +1,4 @@
-const {getAllStudents,  createStudent, inativateStudent, updateStudent, getStudentById} = require('../1services/StudentsService');
+const {getAllStudents,  createStudent, inativateStudent, updateStudent, getStudentById, getStudentsByName} = require('../1services/StudentsService');
 const {getSpecialityFromStudent} = require('../1services/necessityService');
 const {getavailablehours} = require('../1services/availableHoursServise');
 
@@ -21,6 +21,17 @@ async function getDataById(req, res) {
         res.status(200).json(data);
     } catch (err) {
         res.status(500).send('Erro ao buscar dados controller');
+    }
+}
+
+async function getDataByName(req, res) {
+    try {
+        console.log("getDataByname");
+        const {name} = req.body;
+        const data = await getStudentsByName(name);
+        res.status(200).json(data);
+    } catch (err) {
+        res.status(500).send(`Erro ao buscar controler: ${err}`);
     }
 }
 
@@ -102,6 +113,7 @@ async function inativateDataStudent(req, res) {
 module.exports = {
     getData,
     getDataById,
+    getDataByName,
     getDataHours,
     getDataNecessity,
     setDataStudent,
