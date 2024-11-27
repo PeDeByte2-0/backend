@@ -49,7 +49,7 @@ async function setDataProfessional(req, res) {
 async function updateData(req, res) {
     
     try {
-        const {idSchool, firstName, lastName, cpf, celular, celular2, responsavel, obs, idAvalilablehours, specialits} = req.body;
+        const {idSchool, firstName, lastName, cpf, celular, celular2, responsavel, obs, idAvalilablehours, speciality} = req.body;
 
         const PersonId = req.params.id;
 
@@ -57,7 +57,7 @@ async function updateData(req, res) {
             return res.status(400).json({ message: 'Os campos "idPerson", "firstName", "lastName", "cpf" e "celular" são obrigatórios.' });
         }
 
-        const updatedProfessional = await updateProfessional(PersonId, idSchool, firstName, lastName, cpf, celular, celular2, responsavel, obs, idAvalilablehours, specialits);
+        const updatedProfessional = await updateProfessional(PersonId, idSchool, firstName, lastName, cpf, celular, celular2, responsavel, obs, idAvalilablehours, speciality);
 
         if(updatedProfessional){
             const professional = await getProfessionalById(PersonId);

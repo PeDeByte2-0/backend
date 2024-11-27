@@ -71,7 +71,7 @@ async function createProfessional(idSchool, firstName, lastName, cpf, celular, c
         // Finaliza a transação
         await client.query('COMMIT');
 
-        console.log('Novo aluno inserido com ID: ', personId);
+        console.log('Novo profissional inserido com ID: ', personId);
         return { id: personId };
     } catch (err) {
         // Reverte a transação em caso de erro
@@ -98,12 +98,6 @@ async function updateProfessional(PersonId, idSchool, firstName, lastName, cpf, 
 
         for (const hour of idAvalilablehours){
             insertAvailableHours(PersonId, hour);
-        }
-
-        deleteNecessityByID(PersonId);
-
-        for (const necessity of specialits){
-            insertNecessity(PersonId, necessity);
         }
 
         updateMember(PersonId, obs);
