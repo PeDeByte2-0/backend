@@ -1,12 +1,25 @@
 // src/controllers/hoursController.js
 const { getAllHours, getHourById, createHour, updateHour, deleteHour } = require('../1services/hoursService');
 
+function hoursConverter(hours) {
+  return hours.map(e => ({
+    ...e, // Copia as propriedades originais
+    weekday: e.weekday === "0" ? 'Segunda-feira' :
+             e.weekday === "1" ? 'Terça-feira' :
+             e.weekday === '2' ? 'Quarta-feira' :
+             e.weekday === '3' ? 'Quinta-feira' :
+             e.weekday === '4' ? 'Sexta-feira' :
+             e.weekday === "5" ? 'Sábado' :
+             'Domingo'
+  }));
+}
 async function getHours(req, res) {
   try {
     console.log("getHours");
     
     const data = await getAllHours();
-    res.json(data);
+    const newData = hoursConverter(data);
+    res.json(newData);
   } catch (err) {
     res.status(500).send('Erro ao buscar dados de horas no controller');
   }
@@ -17,7 +30,8 @@ async function getById(req, res) {
     console.log("getHourById");
     const hourId = req.params.id;
     const data = await getHourById(hourId);
-    res.json(data);
+    const newData = hoursConverter(data);
+    res.json(newData);
   } catch (err) {
     res.status(500).send('Erro ao buscar hora pelo ID no controller');
   }
