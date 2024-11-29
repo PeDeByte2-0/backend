@@ -1,22 +1,50 @@
-const { client } = require('../0config/database');
 
+const {client} = require('../0config/database');
 
-async function insertProfessional(memberId, speciality) {
+async function createProfessional(PersonId, SpecialityId){
     try {
-        if (!speciality) {
-            throw new Error("The 'speciality' parameter is required and cannot be null.");
-        }
+        
+        await client.query('BEGIN');
 
-        const query = `
-            INSERT INTO "PeDeByteSchema".tb_professional (member_id, speciality_id)
-            VALUES ($1, $2);
-        `;
-        const values = [memberId, speciality];
-        await client.query(query, values);
+        console.log(`ID do profissional: ${PersonId}, ID da especialidade: ${SpecialityId}`);
+        const query = `insert into "PeDeByteSchema".tb_professional (member_id, speciality_id)
+values ($1, $2);`;
+    const result = await client.query(query, [PersonId, SpecialityId]);
+
+        await client.query('COMMIT');
+        return result.rows[0];
+
     } catch (err) {
-        console.error(`Error inserting into tb_professional: ${err.message}`);
-        throw err; // Re-throw the error to handle it at a higher level.
+
+        await client.query('ROLLBACK');
+        console.log(`Erro inserindo na tabela tb_profesisonal: ${err}`);
+        throw err;
+
     }
 }
 
-module.exports = {insertProfessional}
+async function updateProfessional(PersonId, SpecialityId){
+    try {
+        
+        await client.query('BEGIN');
+
+        const query = `update "PeDeByteSchema".tb_professional set speciality_id = $1 where member_id = $2;`
+        const result = await client.query(query, [SpecialityId, PersonId]);
+        
+        await client.query('COMMIT');
+        return result.rows[0];
+
+    } catch (err) {
+        
+        await client.query('ROLLBACK');
+        console.log(`Erro atualizando a tabela tb_professional: ${err}`);
+        throw err;
+        
+    }
+} 
+
+module.exports = {
+    createProfessional,
+    updateProfessional,
+}
+
