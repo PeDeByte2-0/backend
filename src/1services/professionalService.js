@@ -1,3 +1,4 @@
+
 const {client} = require('../0config/database');
 
 async function createProfessional(PersonId, SpecialityId){
@@ -46,3 +47,4 @@ module.exports = {
     createProfessional,
     updateProfessional,
 }
+

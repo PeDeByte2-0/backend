@@ -1,3 +1,4 @@
+
 const {getavailablehours} = require('../1services/availableHoursServise');
 const {getAllProfessionals, getProfessionalById, createProfessionals, updateProdessionals, inativateProfessional} = require('../1services/professionalsSerice');
 
@@ -39,10 +40,12 @@ async function getDataHours(req, res) {
     
     try {
 
+
         console.log('GetDataHours');
         const personId = req.params.id;
         const data = await getavailablehours(personId);
         res.json(data);
+
 
     } catch (err) {
 
@@ -69,19 +72,23 @@ async function setDataProfessional(req, res) {
 
     }
 
+
 }
 
 async function updateData(req, res) {
     
     try {
+
         
         const {idSchool, firstName, lastName, cpf, celular, obs, specialityId, AvailableHoursId} = req.body
+
 
         const PersonId = req.params.id;
 
         if (!PersonId || !firstName || !lastName || !cpf || !celular) {
             return res.status(400).json({ message: 'Os campos "idPerson", "firstName", "lastName", "cpf" e "celular" são obrigatórios.' });
         }
+
 
         const updatedPrfessional = await updateProdessionals(PersonId,idSchool, firstName, lastName, cpf, celular, obs, specialityId, AvailableHoursId);
 
