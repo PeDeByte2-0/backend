@@ -45,7 +45,7 @@ async function getStudentById(PersonId) {
         console.log ('Resultado do SELECT: ', result.rows);
         return result.rows[0];
     } catch (err) {
-        console.error(`Erro ao buscar todos os estudantes: ${err}`);
+        console.error(`Erro ao buscar o estudante ID ${PersonId}: ${err}`);
         throw err;
     }
 }
@@ -169,6 +169,7 @@ async function inativateStudent(PersonId) {
         throw err;
     }
 }
+
 module.exports = {
     getStudentById,
     getAllStudents,
