@@ -10,7 +10,7 @@ const schoolRoutes = require('./3routes/schoolRoutes'); // Suas rotas
 const specialityRoutes = require('./3routes/specialityRoutes'); // Suas rotas
 const weekProfileRoutes = require('./3routes/weekProfileRoutes'); // Suas rotas
 const studentsRoutes = require('./3routes/studentsRoutes');
-const professionalRoutes = require('./3routes/professionalRoutes');
+const scheduleRoutes = require('./3routes/scheduleRoutes');
 
 const app = express();
 
@@ -25,4 +25,5 @@ app.use('/api', specialityRoutes);  // Define a base para as rotas
 app.use('/api', weekProfileRoutes);  // Define a base para as rotas
 app.use('/api', studentsRoutes);  // Define a base para as
 app.use('/api', professionalRoutes);
+app.use('/api', scheduleRoutes);
 module.exports = app;
