@@ -8,7 +8,7 @@ const { insertStudent } = require('./studentService');
 
 async function getAllStudents() {
     try {
-        const query = 'select tp.id_person, tp.active, tpd.first_name,tpd.last_name,tpd.cpf,tpd.celular, tm.obs from "PeDeByteSchema".tb_person tp join "PeDeByteSchema".tb_person_data tpd on tp.id_person = tpd.person_id join "PeDeByteSchema".tb_member tm on tp.id_person = tm.person_id join "PeDeByteSchema".tb_student ts on tp.id_person = ts.member_id where tp.active = true;';
+        const query = 'select tp.id_person, tp.active, tpd.first_name,tpd.last_name,tpd.cpf,tpd.celular, tpd.celular_2, tpd.responsavel, tm.obs from "PeDeByteSchema".tb_person tp join "PeDeByteSchema".tb_person_data tpd on tp.id_person = tpd.person_id join "PeDeByteSchema".tb_member tm on tp.id_person = tm.person_id join "PeDeByteSchema".tb_student ts on tp.id_person = ts.member_id where tp.active = true;';
         const result = await client.query(query);
 
         console.log ('Resultado do SELECT: ', result.rows);
@@ -44,6 +44,38 @@ async function getStudentById(PersonId) {
 
         console.log ('Resultado do SELECT: ', result.rows);
         return result.rows[0];
+    } catch (err) {
+        console.error(`Erro ao buscar o estudante ID ${PersonId}: ${err}`);
+        throw err;
+    }
+}
+
+async function getStudentsByName(PersonName) {
+    try {
+        const first = PersonName;
+        const last = PersonName;
+        console.log(`Nome recebido: ${PersonName}`);
+        const query = `select  tp.id_person, 
+		tp.active, 
+		tpd.first_name,
+		tpd.last_name,
+		tpd.cpf,tpd.celular, 
+		tpd.celular_2, 
+		tpd.responsavel,
+        tm.obs 
+    from "PeDeByteSchema".tb_person tp 
+    join "PeDeByteSchema".tb_person_data tpd on 
+	    tp.id_person = tpd.person_id 
+    join "PeDeByteSchema".tb_member tm on 
+	    tp.id_person = tm.person_id 
+    join "PeDeByteSchema".tb_student ts on 
+	    tm.person_id  = ts.member_id 
+    where 
+        tp.active = true and 
+        (lower(tpd.first_name) LIKE $1 OR lower(tpd.last_name) LIKE $2);`;
+        const result = await client.query(query, [`%${PersonName}%`, `%${PersonName}%`]);
+        console.log ('Resultado do SELECT: ', result.rows);
+        return result.rows;
     } catch (err) {
         console.error(`Erro ao buscar todos os estudantes: ${err}`);
         throw err;
@@ -137,10 +169,12 @@ async function inativateStudent(PersonId) {
         throw err;
     }
 }
+
 module.exports = {
     getStudentById,
     getAllStudents,
     createStudent,
     inativateStudent,
     updateStudent,
+    getStudentsByName,
 }
