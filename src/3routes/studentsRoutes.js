@@ -62,7 +62,7 @@ router.post('/students', async (req, res, next) => {
     setDataStudent(req, res, next);
 })
 
-//Método: POST | URL: http://localhost:8080/api/students/:id
+//Método: PUT | URL: http://localhost:8080/api/students/:id
 //Exemplo para edição (PUT) de aluno
 // {
 //     "idSchool": "1",
@@ -81,7 +81,7 @@ router.put('/students/:id', async (req, res, next) => {
     updateData(req, res, next);
 })
 
-//Método: PUT | URL: http://localhost:8080/api/students/:id
+//Método: PUT | URL: http://localhost:8080/api/students/inativate/:id
 //Inativa o estudante e as horas agendadas do mesmo (Passar ID do estudante)
 router.put('/students/inativate/:id', async (req, res, next) => {
     console.log('Requisição recebida em /students/inativate/:id');

@@ -9,27 +9,27 @@ async function getAllProfessionals(){
 
     try {
 
-        const query = `select  tp.id_person, 
-		tp.active, 
-		tpd.first_name,
-		tpd.last_name,
-		tpd.cpf,tpd.celular,
-		ts."name" as specialy
-from "PeDeByteSchema".tb_person tp 
-join "PeDeByteSchema".tb_person_data tpd on 
-	tp.id_person = tpd.person_id 
-join "PeDeByteSchema".tb_member tm on 
-	tp.id_person = tm.person_id 
-join "PeDeByteSchema".tb_professional tp2 on
-	tp.id_person = tp2.member_id 
-join "PeDeByteSchema".tb_speciality ts on
-	tp2.speciality_id = ts.id_speciality 
-where tp.active = true;`;
-const result = await client.query(query);
+        const query = ` select  tp.id_person, 
+                                tp.active, 
+                                tpd.first_name,
+                                tpd.last_name,
+                                tpd.cpf,tpd.celular,
+                                ts."name" as specialy
+                        from "PeDeByteSchema".tb_person tp 
+                        join "PeDeByteSchema".tb_person_data tpd on 
+                            tp.id_person = tpd.person_id 
+                        join "PeDeByteSchema".tb_member tm on 
+                            tp.id_person = tm.person_id 
+                        join "PeDeByteSchema".tb_professional tp2 on
+                            tp.id_person = tp2.member_id 
+                        join "PeDeByteSchema".tb_speciality ts on
+                            tp2.speciality_id = ts.id_speciality 
+                        where tp.active = true;`;
+        const result = await client.query(query);
 
-console.log(`Resultado do SELECT: `, result.rows);
+        console.log(`Resultado do SELECT: `, result.rows);
 
-return result.rows;
+        return result.rows;
 
     } catch (err) {
 

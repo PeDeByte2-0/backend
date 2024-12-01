@@ -18,7 +18,7 @@ router.get('/professionals/:id', (req, res, next) => {
     getDataById(req, res, next);
 });
 
-//Método: GET | URL: http://localhost:8080/api/professionals/id
+//Método: GET | URL: http://localhost:8080/api/professionals/hour/id
 //Retorna as horas de atendimento do profissional (Passar ID do profissional)
 router.get('/professionals/hour/:id', (req, res, next) => {
     console.log('Requisição recebida em /professionals/hour/:id');
@@ -34,8 +34,6 @@ router.get('/professionals/hour/:id', (req, res, next) => {
 //     "lastName": "Madeira",
 //     "cpf": "11052977995",
 //     "celular": "999055949",
-//     "celular2": "998605544",
-//     "responsavel": "Ataide Mariot",
 //     "obs": "affs",
 //     "specialityId": "3",
 //     "AvailableHoursId": ["2", "3"]
@@ -62,7 +60,7 @@ router.put('/professionals/:id', async (req, res, next) => {
     updateData(req, res, next);
 });
 
-//Método: PUT | URL: http://localhost:8080/api/professionals/id
+//Método: PUT | URL: http://localhost:8080/api/professionals/inativate/id
 //Inativa o profissional e as horas agendadas do mesmo (Passar ID do profissional)
 router.put('/professionals/inativate/:id', async (req, res, next) => {
     console.log('Requisição recebida em /professionals/inativate/:id');
