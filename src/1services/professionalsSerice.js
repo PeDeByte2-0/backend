@@ -14,7 +14,7 @@ async function getAllProfessionals(){
                                 tpd.first_name,
                                 tpd.last_name,
                                 tpd.cpf,tpd.celular,
-                                ts."name" as specialy
+                                ts."name" as speciality
                         from "PeDeByteSchema".tb_person tp 
                         join "PeDeByteSchema".tb_person_data tpd on 
                             tp.id_person = tpd.person_id 
@@ -49,7 +49,7 @@ async function getProfessionalById(PersonId){
 		tpd.first_name,
 		tpd.last_name,
 		tpd.cpf,tpd.celular,
-		ts."name" as specialy
+		ts."name" as speciality
 from "PeDeByteSchema".tb_person tp 
 join "PeDeByteSchema".tb_person_data tpd on 
 	tp.id_person = tpd.person_id 
