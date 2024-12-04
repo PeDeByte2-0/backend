@@ -16,6 +16,13 @@ const authRoutes = require('./3routes/authRoutes')
 
 const app = express();
 
+const cors = require('cors');
+
+app.use(cors({
+    origin: 'http://localhost:3000', // Endereço do frontend
+    credentials: true, // Se estiver usando cookies ou autenticação baseada em sessão
+}));
+
 app.use(express.json());  // Se você for enviar/receber JSON, adicione esse middleware
 app.use('/api', schoolRoutes);  // Define a base para as rotas
 app.use('/api', memberRoutes);  // Define a base para as rotas
