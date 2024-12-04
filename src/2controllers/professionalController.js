@@ -1,6 +1,6 @@
 
 const {getavailablehours} = require('../1services/availableHoursServise');
-const {getAllProfessionals, getProfessionalById, createProfessionals, updateProdessionals, inativateProfessional} = require('../1services/professionalsSerice');
+const {getAllProfessionals, getProfessionalById, createProfessionals, updateProdessionals, inativateProfessional, getProfessionalByName} = require('../1services/professionalsSerice');
 
 async function getData(req, res) {
     
@@ -34,6 +34,17 @@ async function getDataById(req, res) {
 
     }
 
+}
+
+async function getDataByName(req, res) {
+    try {
+        console.log("getDataByname");
+        const {name} = req.body;
+        const data = await getProfessionalByName(name);
+        res.status(200).json(data);
+    } catch (err) {
+        res.status(500).send(`Erro ao buscar controler: ${err}`);
+    }
 }
 
 async function getDataHours(req, res) {
@@ -141,6 +152,7 @@ module.exports = {
     getData,
     getDataById,
     getDataHours,
+    getDataByName,
     setDataProfessional,
     updateData,
     inativateDataProfesional,
