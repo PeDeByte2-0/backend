@@ -177,6 +177,122 @@ async function getAllScheduling() {
 
 }
 
+async function getSchedulingByPersonNameandweekday(PersonName, WeekDayId){
+
+    try {
+
+        const query = `SELECT  
+                        ts.id_scheduled,
+                        ts.student_id,
+                        tpd_student.first_name AS student_name,
+                        tpd_student.last_name AS student_surname,
+                        ts.professional_id,
+                        tpd_professional.first_name AS professional_name,
+                        tpd_professional.last_name AS professional_surname,
+                        ts2.name AS speciality,
+                        ts.hours_id,
+                        th.weekday,
+                        th.starttime AS start_time,
+                        th.endtime AS end_time,
+                        ts.scheduled
+                    FROM "PeDeByteSchema".tb_scheduled ts
+                    JOIN "PeDeByteSchema".tb_hours th 
+                        ON ts.hours_id = th.id_hours
+                    JOIN "PeDeByteSchema".tb_person_data tpd_student 
+                        ON tpd_student.person_id = ts.student_id
+                    JOIN "PeDeByteSchema".tb_person_data tpd_professional 
+                        ON tpd_professional.person_id = ts.professional_id
+                    JOIN "PeDeByteSchema".tb_professional tp
+                        ON tp.member_id = ts.professional_id
+                    JOIN "PeDeByteSchema".tb_speciality ts2
+                        ON tp.speciality_id = ts2.id_speciality
+                    WHERE ts.scheduled = TRUE
+                    AND (
+                        lower(tpd_student.first_name) LIKE $1 
+                        OR lower(tpd_student.last_name) LIKE $2
+                        OR lower(tpd_professional.first_name) LIKE $3 
+                        OR lower(tpd_professional.last_name) LIKE $4
+                    )
+                    AND th.weekday LIKE $5
+                    AND EXISTS (
+                        SELECT 1
+                        FROM "PeDeByteSchema".tb_person ts3
+                        WHERE ts3.active = TRUE
+                    );`;
+
+        const result = await client.query(query, [`%${PersonName}%`, `%${PersonName}%`, `%${PersonName}%`, `%${PersonName}%`, `${WeekDayId}`]);
+
+        console.log ('Resultado do SELECT: ', result.rows);
+
+        return result.rows;
+
+    } catch (err) {
+        
+        console.error(`Erro ao buscar o agendamento pelo nome ${PersonName} e pela data ${WeekDayId}: ${err}`);
+        throw err;
+
+    }
+
+}
+
+async function getSchedulingByPersonName(PersonName){
+
+    try {
+
+        const query = `SELECT  
+                        ts.id_scheduled,
+                        ts.student_id,
+                        tpd_student.first_name AS student_name,
+                        tpd_student.last_name AS student_surname,
+                        ts.professional_id,
+                        tpd_professional.first_name AS professional_name,
+                        tpd_professional.last_name AS professional_surname,
+                        ts2.name AS speciality,
+                        ts.hours_id,
+                        th.weekday,
+                        th.starttime AS start_time,
+                        th.endtime AS end_time,
+                        ts.scheduled
+                    FROM "PeDeByteSchema".tb_scheduled ts
+                    JOIN "PeDeByteSchema".tb_hours th 
+                        ON ts.hours_id = th.id_hours
+                    JOIN "PeDeByteSchema".tb_person_data tpd_student 
+                        ON tpd_student.person_id = ts.student_id
+                    JOIN "PeDeByteSchema".tb_person_data tpd_professional 
+                        ON tpd_professional.person_id = ts.professional_id
+                    JOIN "PeDeByteSchema".tb_professional tp
+                        ON tp.member_id = ts.professional_id
+                    JOIN "PeDeByteSchema".tb_speciality ts2
+                        ON tp.speciality_id = ts2.id_speciality
+                    WHERE ts.scheduled = TRUE
+                    AND (
+                        lower(tpd_student.first_name) LIKE $1 
+                        OR lower(tpd_student.last_name) LIKE $2
+                        OR lower(tpd_professional.first_name) LIKE $3 
+                        OR lower(tpd_professional.last_name) LIKE $4
+                    )
+                    AND EXISTS (
+                        SELECT 1
+                        FROM "PeDeByteSchema".tb_person ts3
+                        WHERE ts3.active = TRUE
+                    );`;
+
+        const result = await client.query(query, [`%${PersonName}%`, `%${PersonName}%`, `%${PersonName}%`, `%${PersonName}%`]);
+
+        console.log ('Resultado do SELECT: ', result.rows);
+
+        return result.rows;
+
+    } catch (err) {
+        
+        console.error(`Erro ao buscar o agendamento pelo nome ${PersonName} e pela data ${WeekDayId}: ${err}`);
+        throw err;
+
+    }
+
+}
+
+
 async function getSchedulingByPersonId(PersonId) {
     
     try {
@@ -363,4 +479,7 @@ module.exports = {
     getMatchedHours,
     insertSchedulingHour,
     unschedule,
+    getSchedulingByPersonNameandweekday,
+    getSchedulingByPersonName,
+
 }

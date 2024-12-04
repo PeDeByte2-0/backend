@@ -1,5 +1,5 @@
 const express = require('express');
-const {getFreeData, getScheduledData, getAllDataScheduling, insertSchedulingData, unscheduleData, getMachedData} = require('../2controllers/schedule.controller');
+const {getFreeData, getScheduledData, getAllDataScheduling, insertSchedulingData, unscheduleData, getMachedData, getScheduledDataByNameandDay} = require('../2controllers/schedule.controller');
 const router = express.Router();
 
 //Método: GET | URL: http://localhost:8080/api/schedule/scheduledTime/(id)
@@ -19,6 +19,20 @@ router.get('/schedule/freeTime/:id', (req, res, next) => {
     console.log('Requisição recebida em /schedule/freeTime/:id');
     getFreeData(req, res, next);
 
+});
+
+
+//Método: PUT | URL: http://localhost:8080/api/schedule/nameAndDay
+//Usa o método PUT para fazer um SELECT  e retornar apenas as horas pelo nome e dia da semana selecionado
+//Exemplo de BODY (Passamos os nome pesquisado e Di da semana)
+// {
+        // "PersonName" : "", 
+        // "WeekDayId": ""
+// }
+router.put('/schedule/nameAndDay', (req, res, next) => {
+
+    console.log('Requisição recebida em /schedule/nameAndDay')
+    getScheduledDataByNameandDay(req, res, next);
 });
 
 //Método: PUT | URL: http://localhost:8080/api/schedule/match
