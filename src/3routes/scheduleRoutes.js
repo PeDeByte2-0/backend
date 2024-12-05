@@ -1,5 +1,5 @@
 const express = require('express');
-const {getFreeData, getScheduledData, getAllDataScheduling, insertSchedulingData, unscheduleData, getMachedData, getScheduledDataByNameandDay} = require('../2controllers/schedule.controller');
+const {getFreeData,getMatchingProfessionalData, getScheduledData, getAllDataScheduling, insertSchedulingData, unscheduleData, getMachedData, getScheduledDataByNameandDay} = require('../2controllers/schedule.controller');
 const router = express.Router();
 
 //Método: GET | URL: http://localhost:8080/api/schedule/scheduledTime/(id)
@@ -8,6 +8,15 @@ router.get('/schedule/scheduledTime/:id', (req, res, next) => {
     
     console.log('Requisição recebida em /schedule/scheduledTime/:id');
     getScheduledData(req, res, next);
+
+});
+
+//Método: GET | URL: http://localhost:8080/api/schedule/scheduledTime/(id)
+//Retorna todos os horários agendados para o estudante ou profissional (Passar id do estudante ou profissional)
+router.get('/schedule/matchingProfessional/:id', (req, res, next) => {
+    
+    console.log('Requisição recebida em /schedule/matchingProfessional/:id');
+    getMatchingProfessionalData(req, res, next);
 
 });
 

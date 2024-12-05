@@ -1,5 +1,16 @@
-const {getFreeTimeById, getScheduledTimeById, getAllScheduling, insertSchedulingHour, unschedule, getMatchedHours, getSchedulingByPersonName, getSchedulingByPersonNameandweekday} = require('../1services/scheduleService');
-
+const {getFreeTimeById,getMatchingProfessionalsByStudentId, getScheduledTimeById, getAllScheduling, insertSchedulingHour, unschedule, getMatchedHours, getSchedulingByPersonName, getSchedulingByPersonNameandweekday} = require('../1services/scheduleService');
+function hoursConverter(hours) {
+    return hours.map(e => ({
+      ...e, // Copia as propriedades originais
+      weekday: e.weekday === "0" ? 'Segunda-feira' :
+               e.weekday === "1" ? 'Terça-feira' :
+               e.weekday === '2' ? 'Quarta-feira' :
+               e.weekday === '3' ? 'Quinta-feira' :
+               e.weekday === '4' ? 'Sexta-feira' :
+               e.weekday === "5" ? 'Sábado' :
+               'Domingo'
+    }));
+  }
 
 async function getFreeData(req, res) {
     
@@ -18,6 +29,24 @@ async function getFreeData(req, res) {
     }
 
 }
+
+async function getMatchingProfessionalData(req, res) {
+    try {
+        const studentId = req.params.id;  // Pega o ID do aluno da URL
+        console.log('getMatchingProfessionalData' + studentId);
+        
+        // Chama a função que retorna os profissionais correspondentes ao aluno
+        const data = await getMatchingProfessionalsByStudentId(studentId);
+        // Retorna os dados em formato JSON
+        res.json(data);
+        
+    } catch (err) {
+        // Em caso de erro, loga o erro e retorna uma mensagem
+        console.error('Erro ao buscar consulta', err);
+        res.status(500).send('Erro ao buscar dados no controller');
+    }
+}
+
 
 async function getScheduledData(req, res) {
     
@@ -82,7 +111,8 @@ async function getAllDataScheduling(req, res) {
     try {
         
         const data = await getAllScheduling();
-        res.json(data);
+        newdata = hoursConverter(data);
+        res.json(newdata);
 
     } catch (err) {
         
@@ -92,26 +122,30 @@ async function getAllDataScheduling(req, res) {
     }
 
 }
-
 async function insertSchedulingData(req, res) {
-    
     try {
-        
-        const {StudentId, ProfessionalId, HoursId} = req.body;
-        const data = await insertSchedulingHour(StudentId, ProfessionalId, HoursId);
-        
-        if(data){
-            return res.status(200).send('Horário agendado');
-        }else{
-            return res.status(404).send('Favor verificar informações enviadas. Hora não agendada');
-        }
-        
-    } catch (err) {
+        const { StudentId, HoursData, Observacao } = req.body;
 
-        res.status(500).json({message: 'Erro ao agendar horário ', error: err.message});
-        
+        // Para cada item de HoursData, insira no banco
+        for (const hour of HoursData) {
+            const { id_hours, id_professional } = hour;
+
+            // Aqui você pode chamar a função para inserir no banco
+            const result = await insertSchedulingHour(StudentId, id_professional, id_hours, Observacao);
+
+            if (!result) {
+                return res.status(404).send('Erro ao agendar horário');
+            }
+        }
+
+        return res.status(200).send('Horário(s) agendado(s) com sucesso');
+    } catch (err) {
+        console.error('Erro ao agendar horário:', err);
+        return res.status(500).json({ message: 'Erro ao agendar horário', error: err.message });
     }
 }
+
+
 
 async function unscheduleData(req, res) {
     
@@ -141,5 +175,6 @@ module.exports = {
     insertSchedulingData,
     unscheduleData,
     getMachedData,
-    getScheduledDataByNameandDay
+    getScheduledDataByNameandDay,
+    getMatchingProfessionalData
 }

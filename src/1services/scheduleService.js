@@ -41,6 +41,53 @@ async function getFreeTimeById(PersonId){
 
 }
 
+async function getMatchingProfessionalsByStudentId(studentId) {
+    try {
+        const query = `
+           WITH student_availability AS (
+                SELECT at.hours_id
+                FROM "PeDeByteSchema".tb_available_time at
+                JOIN "PeDeByteSchema".tb_student s ON at.member_id = s.member_id
+                WHERE s.member_id = $1
+            ),
+            matching_professionals AS (
+                SELECT 
+                    p.member_id AS professional_id,
+                    sp.name AS speciality_name,
+                    h.*,
+                    pd.first_name || ' ' || pd.last_name AS professional_name
+                FROM "PeDeByteSchema".tb_professional p
+                JOIN "PeDeByteSchema".tb_speciality sp ON p.speciality_id = sp.id_speciality
+                JOIN "PeDeByteSchema".tb_available_time at ON at.member_id = p.member_id
+                JOIN student_availability sa ON sa.hours_id = at.hours_id
+                JOIN "PeDeByteSchema".tb_necessity n ON n.speciality_id = sp.id_speciality AND n.student_id = $1
+                JOIN "PeDeByteSchema".tb_hours h ON h.id_hours = at.hours_id
+                JOIN "PeDeByteSchema".tb_person_data pd ON pd.person_id = p.member_id
+                JOIN "PeDeByteSchema".tb_person ps ON ps.id_person = p.member_id
+                WHERE ps.active = true  -- Filtra apenas profissionais ativos
+            )
+            SELECT DISTINCT professional_id, professional_name, speciality_name, id_hours, weekday, starttime, endtime
+            FROM matching_professionals;
+        `;
+
+        const result = await client.query(query, [studentId]);
+
+        if (result.rows.length === 0) {
+            console.log(`Não foi encontrado nenhum profissional disponível para o aluno com ID ${studentId}`);
+            return [];
+        } else {
+            console.log(`Resultados do SELECT: `, result.rows);
+            return result.rows;
+        }
+
+    } catch (err) {
+        console.error(`Erro ao buscar profissionais para o aluno com ID ${studentId}, erro: ${err}`);
+        throw err;
+    }
+}
+
+
+
 async function getScheduledTimeById(PersonId){
     
     try {
@@ -395,14 +442,14 @@ async function unscheduleHour(PersonId, HoursId) {
     
 }
 
-async function insertSchedulingHour(StudentId, ProfessionalId, HoursId) {
+async function insertSchedulingHour(StudentId, ProfessionalId, HoursId,Observacao) {
     
     try {
         
         await client.query('BEGIN;');
 
-        const query = ` insert into "PeDeByteSchema".tb_scheduled(student_id, professional_id, hours_id, scheduled) values($1, $2, $3, TRUE) returning *;`;
-        const result = await client.query(query, [StudentId, ProfessionalId, HoursId]);
+        const query = ` insert into "PeDeByteSchema".tb_scheduled(student_id, professional_id, hours_id, scheduled, observacao) values($1, $2, $3, TRUE,$4) returning *;`;
+        const result = await client.query(query, [StudentId, ProfessionalId, HoursId,Observacao]);
         await scheduleHour(StudentId, HoursId);
         await scheduleHour(ProfessionalId, HoursId);
 
@@ -481,5 +528,6 @@ module.exports = {
     unschedule,
     getSchedulingByPersonNameandweekday,
     getSchedulingByPersonName,
+    getMatchingProfessionalsByStudentId,
 
 }
