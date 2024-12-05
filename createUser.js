@@ -6,4 +6,4 @@ async function hashPassword(plainPassword) {
   console.log('Senha criptografada:', hashedPassword);
 }
 
-hashPassword('12345');
+hashPassword('admin');

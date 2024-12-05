@@ -2,7 +2,7 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const { client } = require('../0config/database'); // Importar o cliente configurado
 
-const JWT_SECRET = process.env.JWT_SECRET; // Use variáveis de ambiente em produção
+const JWT_SECRET = 'senhasecreta'; // Use variáveis de ambiente em produção
 
 module.exports = {
   async authenticate(username, password) {
