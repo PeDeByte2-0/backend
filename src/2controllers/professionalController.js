@@ -75,7 +75,7 @@ async function setDataProfessional(req, res) {
 
         const newProfessional = await createProfessionals(idSchool, firstName, lastName, cpf, celular, obs, specialityId, AvailableHoursId);
 
-        res.status(201).json(newProfessional);
+        res.status(200).json(newProfessional);
 
     } catch (err) {
         
