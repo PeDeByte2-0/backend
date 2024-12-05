@@ -62,7 +62,7 @@ async function setDataStudent(req, res) {
         const {idSchool, firstName, lastName, cpf, celular, celular2, responsavel, obs, idAvalilablehours, specialits} = req.body;
 
         const newStudent = await createStudent(idSchool, firstName, lastName, cpf, celular, celular2, responsavel, obs, idAvalilablehours, specialits);
-        res.status(201).json(newStudent);
+        res.status(200).json(newStudent);
     } catch (err) {
         res.status(500).send ('Erro ao criar novo estudante: ' +err.message);
     }

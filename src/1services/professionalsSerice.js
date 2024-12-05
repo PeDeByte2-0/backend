@@ -39,6 +39,38 @@ async function getAllProfessionals(){
     }
 }
 
+async function getProfessionalByName(PersonName) {
+    try {
+        const first = PersonName;
+        const last = PersonName;
+        console.log(`Nome recebido: ${PersonName}`);
+        const query = `select  tp.id_person, 
+		tp.active, 
+		tpd.first_name,
+		tpd.last_name,
+		tpd.cpf,tpd.celular,
+        ts.name
+    from "PeDeByteSchema".tb_person tp 
+    join "PeDeByteSchema".tb_person_data tpd on 
+	    tp.id_person = tpd.person_id 
+    join "PeDeByteSchema".tb_member tm on 
+	    tp.id_person = tm.person_id 
+    join "PeDeByteSchema".tb_professional tp2 on
+        tm.person_id = tp2.member_id
+    join "PeDeByteSchema".tb_speciality ts on
+        tp2.speciality_id = ts.id_speciality
+    where
+        tp.active = true and 
+        (lower(tpd.first_name) LIKE $1 OR lower(tpd.last_name) LIKE $2);`;
+        const result = await client.query(query, [`%${PersonName}%`, `%${PersonName}%`]);
+        console.log ('Resultado do SELECT: ', result.rows);
+        return result.rows;
+    } catch (err) {
+        console.error(`Erro ao buscar todos os Profissionais: ${err}`);
+        throw err;
+    }
+}
+
 async function getProfessionalById(PersonId){
 
     try {
@@ -169,5 +201,6 @@ module.exports = {
     getProfessionalById,
     createProfessionals,
     updateProdessionals,
-    inativateProfessional
+    inativateProfessional,
+    getProfessionalByName,
 }

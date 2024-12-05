@@ -1,5 +1,5 @@
 const express = require("express");
-const { getData, getDataById, getDataHours, setDataProfessional, updateData, inativateDataProfesional } = require('../2controllers/professionalController');
+const { getData, getDataById, getDataHours, setDataProfessional, updateData, inativateDataProfesional, getDataByName } = require('../2controllers/professionalController');
 const router = express.Router();
 
 console.log('Rotas /professionals carregada');
@@ -24,6 +24,17 @@ router.get('/professionals/hour/:id', (req, res, next) => {
     console.log('Requisição recebida em /professionals/hour/:id');
     getDataHours(req, res, next);
 });
+
+//Método: POST | URL: http://localhost:8080/api/professionals/name
+//Exemplo do BODY:
+//{
+//    "name": "mar"
+//}
+//O método é um POST, mas retorna todos os profissionais com nome ou sobrenome que encaixem na pesquisa
+router.post('/professionals/name', (req, res, next) => {
+    console.log('Requisição recebida em /professionals/name');
+    getDataByName(req, res, next);
+}) 
 
 
 //Método: POST | URL: http://localhost:8080/api/professionals

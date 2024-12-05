@@ -1,4 +1,4 @@
-const {getFreeTimeById, getScheduledTimeById, getAllScheduling, insertSchedulingHour, unschedule, getMatchedHours} = require('../1services/scheduleService');
+const {getFreeTimeById, getScheduledTimeById, getAllScheduling, insertSchedulingHour, unschedule, getMatchedHours, getSchedulingByPersonName, getSchedulingByPersonNameandweekday} = require('../1services/scheduleService');
 
 
 async function getFreeData(req, res) {
@@ -26,6 +26,29 @@ async function getScheduledData(req, res) {
         const PersonId = req.params.id;
         const data = await getScheduledTimeById(PersonId);
         res.json(data)
+
+    } catch (err) {
+        
+        console.log(`Erro: ${err}`);
+        res.status(500).send('Erro ao buscar dados controller');
+
+    }
+
+}
+
+async function getScheduledDataByNameandDay(req, res) {
+    
+    try {
+        
+        const {PersonName, WeekDayId} = req.body;
+        console.log(`WeekDay: ${WeekDayId}`)
+        if(WeekDayId == 7){
+            const data = await getSchedulingByPersonName(PersonName);
+            return res.status(200).json(data);
+        }else{
+            const data = await getSchedulingByPersonNameandweekday(PersonName, WeekDayId);
+            return res.status(200).json(data)
+        }
 
     } catch (err) {
         
@@ -118,4 +141,5 @@ module.exports = {
     insertSchedulingData,
     unscheduleData,
     getMachedData,
+    getScheduledDataByNameandDay
 }
