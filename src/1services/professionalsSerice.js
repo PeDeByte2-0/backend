@@ -5,39 +5,40 @@ const { createPersonDataProfessional, updatePersonDataProfessional } = require('
 const { createProfessional, updateProfessional } = require('./professionalService')
 const { insertAvailableHours, inativateAvailableHours, getscheduledHour, deleteAvailableHours } = require('./availableHoursServise');
 
-async function getAllProfessionals(){
-
+async function getAllProfessionals() {
     try {
+        const query = `
+            SELECT  tp.id_person, 
+                    tp.active, 
+                    tpd.first_name,
+                    tpd.last_name,
+                    tpd.cpf,
+                    tpd.celular,
+                    ts."name" AS speciality,
+                    tm.obs  -- Incluindo o campo obs da tabela tb_member
+            FROM "PeDeByteSchema".tb_person tp 
+            JOIN "PeDeByteSchema".tb_person_data tpd 
+                ON tp.id_person = tpd.person_id 
+            JOIN "PeDeByteSchema".tb_member tm 
+                ON tp.id_person = tm.person_id 
+            JOIN "PeDeByteSchema".tb_professional tp2 
+                ON tp.id_person = tp2.member_id 
+            JOIN "PeDeByteSchema".tb_speciality ts 
+                ON tp2.speciality_id = ts.id_speciality 
+            WHERE tp.active = true;
+        `;
 
-        const query = ` select  tp.id_person, 
-                                tp.active, 
-                                tpd.first_name,
-                                tpd.last_name,
-                                tpd.cpf,tpd.celular,
-                                ts."name" as speciality
-                        from "PeDeByteSchema".tb_person tp 
-                        join "PeDeByteSchema".tb_person_data tpd on 
-                            tp.id_person = tpd.person_id 
-                        join "PeDeByteSchema".tb_member tm on 
-                            tp.id_person = tm.person_id 
-                        join "PeDeByteSchema".tb_professional tp2 on
-                            tp.id_person = tp2.member_id 
-                        join "PeDeByteSchema".tb_speciality ts on
-                            tp2.speciality_id = ts.id_speciality 
-                        where tp.active = true;`;
         const result = await client.query(query);
 
         console.log(`Resultado do SELECT: `, result.rows);
 
         return result.rows;
-
     } catch (err) {
-
         console.error(`Erro ao buscar todos os profissionais: ${err}`);
         throw err;
-
     }
 }
+
 
 async function getProfessionalByName(PersonName) {
     try {
@@ -49,7 +50,7 @@ async function getProfessionalByName(PersonName) {
 		tpd.first_name,
 		tpd.last_name,
 		tpd.cpf,tpd.celular,
-        ts.name
+        ts.name,
     from "PeDeByteSchema".tb_person tp 
     join "PeDeByteSchema".tb_person_data tpd on 
 	    tp.id_person = tpd.person_id 
@@ -81,7 +82,8 @@ async function getProfessionalById(PersonId){
 		tpd.first_name,
 		tpd.last_name,
 		tpd.cpf,tpd.celular,
-		ts."name" as speciality
+		ts."name" as speciality,
+        tm.obs 
 from "PeDeByteSchema".tb_person tp 
 join "PeDeByteSchema".tb_person_data tpd on 
 	tp.id_person = tpd.person_id 
